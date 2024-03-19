@@ -137,13 +137,13 @@ def b_ex_info(f):
 	
 def get_appoint_info(order_sn):
 	re = None
-	code = '1389jiankang160_20180529'		#
+	code = '1389jxxxxxxx0529'		#
 	hl = hashlib.md5()
 	hl.update(code.encode(encoding='utf-8'))
 	md5code = hl.hexdigest()
 	
-	url = 'https://www.ibodyhome.com/index.php?g=home&m=fri&a=get_order_info&order_sn=%s&code=%s' % (order_sn,md5code)
-	#url = 'http://localhost/index.php?g=home&m=fri&a=get_order_info&order_sn=%s&code=%s' % (order_sn,md5code)
+	url = 'https://=%s&code=%s' % (order_sn,md5code)
+
 	#url='www.baidu.com'
 	http = urllib3.PoolManager()
 	#user_agent = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36'
