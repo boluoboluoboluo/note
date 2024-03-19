@@ -1,0 +1,26 @@
+<html>
+	<head></head>
+	<body>
+		<script type="text/javascript" src="{$_C.hy_path}js/crypto-aes.js"></script>
+	    <script type="text/javascript" src="{$_C.hy_path}js/crypto-mode-ecb.js"></script>
+	    <script type="text/javascript" src="{$_C.hy_path}js/crypto-pad-nopadding.js"></script>
+		<script>
+			//aes加密    lj20211029
+			//str：需加密的字符串
+			//key:32位秘钥key
+		     wu_aes_encrypt = function(str,key){
+		        var key = CryptoJS.enc.Utf8.parse(key);
+		        var plaintText = str; // 明文
+		        var encryptedData = CryptoJS.AES.encrypt(plaintText, key, {
+		            mode: CryptoJS.mode.ECB,
+		            padding: CryptoJS.pad.Pkcs7
+		        });
+		        
+		        var enstr = encryptedData.ciphertext.toString();
+		        var hexstr = CryptoJS.enc.Hex.parse(enstr);
+		        var basestr = CryptoJS.enc.Base64.stringify(hexstr);
+		        return basestr;
+		     }
+		</script>
+	</body>
+</html>

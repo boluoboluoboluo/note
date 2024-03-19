@@ -1,0 +1,6 @@
+
+将文件的默认打开方式还原成无默认打开方式：
+  --1.开始菜单右键运行/regedit
+  --2.删除HKEY_CLASSES_ROOT下需要恢复文件格式的后缀名键值文件夹、HKEY_CURRENT_USER\Software\Microsoft\windows\CurrentVersion\Explorer  \FileExts下需要恢复文件格式的后缀名键值文件夹
+  --3.重启电脑
+
