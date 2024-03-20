@@ -146,9 +146,44 @@ git config --global user.email
 
 ```
 
+### ignore
 
+```sh
+#排除文件或目录可以通过.gitignore文件来实现。.gitignore文件位于Git仓库的根目录下，
+#其中列出的文件或模式会被Git忽略，不会被纳入版本控制。
 
+#.gitignore文件使用简单的模式匹配规则来排除文件或目录：
+1.空行或者以#开头的行会被忽略。
+2.可以使用标准的shell glob模式匹配。
+3.以/结尾的模式表示目录。
+4.以!开头的模式表示例外规则，即不排除该模式匹配的文件或目录。
+5.使用**可以匹配任意中间目录。
+```
 
+**`.gitignore`文件示例：** 
+
+```sh
+# 忽略所有 .log 文件
+*.log
+# 忽略所有 .tmp 文件，但保留 todo.tmp
+*.tmp
+!todo.tmp
+# 忽略所有在 build/ 目录下的文件
+build/
+# 忽略所有在 doc/ 目录及其子目录下的文件
+doc/*
+# 忽略所有在 .gitignore 文件当前目录下的 .env 文件
+.env
+# 忽略所有在 test/ 目录下的 .txt 文件
+test/**/*.txt
+```
+
+在创建或更新`.gitignore`后，需要运行`git add`命令来重新加入不被忽略的文件，这样才能被Git跟踪。如果想要清除已经缓存的文件（即使它们被`.gitignore`忽略），可以使用以下命令：
+
+```sh
+git rm -r --cached .
+git add .
+```
 
 
 

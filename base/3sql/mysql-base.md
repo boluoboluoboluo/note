@@ -47,36 +47,95 @@ mysqldump -h 10.8.1.1 -P 3306 -u lj -pxxxxx wuchuang qnh_goods --where="id>9620"
 #TODO..
 ```
 
-#### 增删改查
+#### 数据库操作
+
+```mysql
+create database database_name;
+CREATE DATABASE database_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+show databases;
+
+SHOW VARIABLES LIKE 'character_set_database';	#查看字符集
+show create database database_name	#查库的字符集
+alter database database_name default character set utf8	#修改默认字符集
+
+ALTER DATABASE database_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+```
+
+##### 表操作
 
 ```sql
 #建表
-SET FOREIGN_KEY_CHECKS=0;
--- ----------------------------
--- Table structure for qnh_ikang_data
--- ----------------------------
-DROP TABLE IF EXISTS `hwc_ikang_data`;
-CREATE TABLE `hwc_ikang_data` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_sn` varchar(255) NOT NULL default "" COMMENT '体检订单号',
-  `order_from` int(11) NOT NULL default 0 COMMENT '订单来源，此字段暂未使用',
+SET FOREIGN_KEY_CHECKS=0;	#禁用外键检查
 
-  `out_order_sn` varchar(255) NOT NULL default "" COMMENT '爱康订单编号',
-  `buy_date` varchar(255) NOT NULL default "" COMMENT '购买日期',
-  `out_goods_name` varchar(255) NOT NULL default "" COMMENT '爱康套餐名称',
-  `out_amount` decimal(10,2) NOT NULL default 0.00 COMMENT '采购金额',
-  `is_bussiness_fee` int(11) NOT NULL default 0 COMMENT '是否作为商务费用,0否1是',
-  `belong_to` varchar(255) NOT NULL default "" COMMENT '商务费用归属',
+#建表
+create table `test`(
+	id int(11) not null auto_increment,
+	name varchar(255) not null default '',
+	age int(4) not null default 0,
+	score decimal(10,2) NOT NULL default 0.00 COMMENT '',
+	primary key (id)
+)engine=innodb default charset=utf8 row_format=dynamic;
 
-  `createtime` int(11) NOT NULL default 0 COMMENT '',
-  `updatetime` int(11) NOT NULL default 0 COMMENT '',
-  `status` int(11) NOT NULL default 0 COMMENT '',
+#删除表
+drop table if exists test;
 
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+#查看表结构
+desc test;
+show columns from test; #同上
+explain test;	#同上，更详细
 
+#查看建表sql
+SHOW CREATE TABLE my_table;
+
+#查看表详细信息
+SHOW TABLE STATUS LIKE 'your_table_name';
+#查看表引擎
+SELECT TABLE_NAME, ENGINE FROM information_schema.TABLES 
+WHERE TABLE_SCHEMA = 'your_database_name' AND TABLE_NAME = 'your_table_name';
+
+#表添加注释
+ALTER TABLE my_table COMMENT='这是表的注释信息';
+
+#查看表注释
+SELECT TABLE_COMMENT 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = 'your_database_name' 
+AND TABLE_NAME = 'your_table_name';
+```
+
+##### 列操作
+
+```mysql
 #添加列
-ALTER TABLE hwc_package ADD COLUMN package_settle_price decimal(10,2)  NOT NULL COMMENT '加项包结算价' after package_price;
+alter table test add column sex int(1) not null default 0 comment '性别' after age;
+
+#修改列类型
+alter table test modify column sex char(3) not null default '0';
+#修改列名+数据类型
+alter table test change column sex sex_2 int(2) not null default 0;
+
+#删除列
+alter table test drop column sex;
+```
+
+##### 数据操作
+
+```sql
+#添加数据
+insert into test (name,age) value("aaa",10);
+insert into test(name,age) value("bbb",11);
+#添加多条数据
+insert into test values(null,'ccc',12,3333),(null,'ddd',22,444);
+
+#查询数据
+select * from test where id=1;
+
+#修改数据
+update test set name='ccc' where id=1;
+
+#删除数据
+delete from test where id=1;
 ```
 
 #### 索引操作
