@@ -44,6 +44,10 @@ git show <commitid>		#查看某次提交详情 commitid为版本id前7位
 ### 回退
 
 ```sh
+git restore	[file]	#恢复
+git restore --stage [file]	#恢复在暂存区的改动
+
+
 git log					#查看版本号
 git reset --hard d8fc1e10c9exxxxxxxxxxxxxx	#恢复到指定版本 hard后面为版本id
 git reset --hard x	回退到某个本地版本,x为git log中出现的hash值的前七位
@@ -178,7 +182,9 @@ doc/*
 test/**/*.txt
 ```
 
-在创建或更新`.gitignore`后，需要运行`git add`命令来重新加入不被忽略的文件，这样才能被Git跟踪。如果想要清除已经缓存的文件（即使它们被`.gitignore`忽略），可以使用以下命令：
+在创建或更新`.gitignore`后，需要运行`git add`命令来重新加入不被忽略的文件，这样才能被Git跟踪。
+
+如果想要清除已经缓存的文件（即使它们被`.gitignore`忽略），可以使用以下命令：
 
 ```sh
 git rm -r --cached .
