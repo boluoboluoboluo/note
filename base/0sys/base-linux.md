@@ -50,6 +50,36 @@ tty		#显示当前使用的tty设备
 echo "hello" >> /dev/pts/1		#向其他终端发信息，不（要轻易尝试向其他设备发数据！）
 ```
 
+#### 逻辑卷LVM
+
+```sh
+逻辑卷		#LV 逻辑卷之和不能超过卷组边界，每个逻辑卷相当于一个分区
+卷组		 #VG 多个物理卷的模拟整体
+物理卷		#pv 物理盘区
+物理块		#PE	默认4m
+
+#物理卷
+pvcreate	#创建物理卷
+pvremove	#移除物理卷数据
+pvscan		#扫描物理卷
+pvs			#查看
+pvdisplay	#显示物理卷详细
+pvmove		#移动物理卷数据
+
+#卷组
+vgcreat		#创建卷组
+...
+vgextend	#扩展
+vgreduce	#
+
+#逻辑卷
+lvcreate	#创建逻辑卷
+...
+
+
+#将LV格式化，挂载，就可以使用
+```
+
 
 
 ### 系统
@@ -116,32 +146,6 @@ systemctl disable 服务名		#不自动启动
 systemctl status 服务名		#查看运行的服务
 systemctl list-units 服务名		#列出所有
 
-#备份配置源
-cp /etc/apt/sources.list /etc/apt/sources.list.bak
-#配置清华源：清华源镜像站
-
-#包管理器apt 
-#apt-get适合脚本，apt适合终端交互
-apt-cache madison package_name	#查询源可用版本
-sudo apt update
-sudo apt search <keyword>	#查找
-apt show <package_name>		#查看软件包的信息
-sudo apt install
-sudo apt install /full/path/file.deb		# 安装本地包
-sudo apt remove
-sudo apt autoremove		# 删除不需要的包（无依赖的）
-sudo apt purge <package_name>	#移除软件包及配置文件
-apt list --installed		#列出本地已安装的包
-apt list --all-versions	#列出所有已安装的包的版本信息
-#如果我们想安装一个软件包，但如果软件包已经存在，则不要升级它，可以使用 –no-upgrade 选项
-sudo apt install <package_name> --no-upgrade	
-
-#说明：如果出现依赖关系问题，提示 依赖: libcurl4 (= 7.64.0-4+deb10u3) 但是 7.74.0-1.3+deb11u1 正要被安装
-#解决方法：
-sudo apt install libcurl4=7.64.0-4+deb10u3		#指定安装版本(降级)
-
-#清理配置文件残留
-dpkg -l |grep "^rc"|awk '{print $2}' |xargs aptitude -y purge
 ```
 
 #### 环境变量
@@ -313,12 +317,6 @@ touch filename	#创建文件
 
 #查找文件 参见bash
 find 目录 -name '文件名'
-
-#压缩解压
-#tar压缩： tar -czvf archive.tar.gz file1 file2 dir1
-tar -czvf test.tar.gz a.c   #压缩 a.c文件为test.tar.gz
-tar -tzvf test.tar.gz 		#列出压缩的文件
-tar -xzvf test.tar.gz 		#解压文件
 ```
 
 ```sh
@@ -349,6 +347,65 @@ wc file
 #字符转化
 tr ”a" "A" < file	#文件里的a换成A
 ```
+
+#### 压缩解压
+
+```sh
+tar		#归档压缩工具：打包 可压缩目录
+	-c	#创建归档文件
+	-f	file.tar	#指定归档后文件名
+	-x	#展开归档
+	--xattrs	#归档时保留文件扩展属性信息
+	-t	#不展开，查看归档文件列表
+	-zcf	#归档并调用gzip压缩
+	-zxf	#gzip解压缩并展开归档，可省略z
+	-jcf	#归档并调用bzip2压缩
+	-jxf	#bzip2解压缩并展开归档，可省略j
+	-Jcf	#归档并调用xz压缩
+	-Jxf	#xz解压缩并展开归档，可省略J
+	
+
+
+
+#示例
+#tar -czvf archive.tar.gz file1 file2 dir1
+tar -czvf test.tar.gz a.c   #压缩 a.c文件为test.tar.gz
+tar -tzvf test.tar.gz 		#列出压缩的文件
+tar -xzvf test.tar.gz 		#解压文件
+
+```
+
+```sh
+#gzip 只能压缩文件， 压缩后 后缀.gz， 
+gzip file	#压缩文件, file.gz 压缩后源文件被清除 ， 
+	-d file.gz #解压缩，解压后file.gz被清除
+	-num	#num为数字，1-9，指定压缩比，默认为6
+
+#bzip2 压缩大文件更有压缩比 只能压缩文件，后缀.bz2
+bzip2 file	#压缩文件，生成file.bz2，压缩后源文件被清除
+	-d file.bz2 #解压缩，解压后file.bz2被清除
+	-num	#num为数字，1-9，指定压缩比，默认为6
+	-k		#压缩后保留源文件
+
+#xz 只能压缩文件，后缀.bz2 压缩更强悍
+xz file	#压缩文件，生成file.xz，压缩后源文件被清除
+	-d file.xz #解压缩，解压后file.xz被清除
+	-num	#num为数字，1-9，指定压缩比，默认为6
+	-k		#压缩后保留源文件
+
+```
+
+```sh
+zip		#归档压缩,压缩后不删除源文件 压缩比小
+zip file.zip file1 file2 ...	#压缩file1,file2...，到file.zip
+unzip file.zip		#解压
+```
+
+```sh
+cpio	#归档命令，同tar，不过更古老
+```
+
+
 
 ### 磁盘
 

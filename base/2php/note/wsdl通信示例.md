@@ -81,14 +81,25 @@ public function wsdl_lhhos_test2(){
 
     $param["XML"] = $xml;
     $re = $client->ExamOrderRegister($param);				//对方接口提供的方法
-    var_dump($re);
-    $re_data = $re->ExamOrderRegisterResponse;			//对方接口返回的字段对象数据
-
-    if($re_data){
-        var_dump($re_data);
+    //var_dump($re);
+   	$xml_str = $re->String;
+    $xml_obj = simplexml_load_string($xml_str); 	
+    $code = (string) $xml_obj->code;
+    $msg = (string) $xml_obj->msg;
+    if(!$xml_obj){
+        echo "接口返回异常...";
     }
-    echo "<br><br>";
-    echo "end..";
+    if($code != "0"){
+        echo "接口返回异常：".$msg;
+    }
+    $arr = [];
+    foreach($xml_obj->returnContents->returnContent as $content){
+        $tmp = [];
+        foreach($content as $k=>$v){
+            $tmp[$k] = (string)$v;	//参数名和
+        }
+    }
+    var_dump($arr);
 }
 
 ```

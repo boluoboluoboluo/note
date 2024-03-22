@@ -81,7 +81,23 @@ bash -n xxx.bash
 bash -x xxx.bash
 ```
 
-#### 变量
+#### EOF
+
+```sh
+#自定义终止符
+cat 1.txt
+输入...
+EOF		#输出EOF，终止
+
+#示例
+cat << EOF
+...
+EOF
+```
+
+
+
+### 变量
 
 ```sh
 #bash变量类型：
@@ -100,7 +116,7 @@ bash -x xxx.bash
 declare -i SUM	#声明SUM为整型
 ```
 
-#### 循环
+### 循环
 
 ```sh
 #示例
@@ -108,6 +124,38 @@ declare -i SUM=0
 for i in {1..100};do
 	let SUM=$SUM+$i
 done
+```
+
+### 列表
+
+```sh
+#定义方式
+a=(1 2 3)
+a=({1..100})	#自动展开1-100
+a=(`seq 1 100`)	#采用序列生成
+#读取
+echo ${a[2]}
+```
+
+### 关系运算
+
+#### 算术运算
+
+```sh
+#1.使用let
+a=1
+b=2
+let c=$a+$b
+echo $c
+
+#2.使用$[]
+c=$[$a+$b]
+
+#3.使用$(())
+c=$(($a+$b))
+
+#4. expr
+c=`expr $a + $b`	#注意空格
 ```
 
 
@@ -130,6 +178,10 @@ ls -l `which useradd`
 
 #命令历史
 history
+
+#输出
+echo hello	
+echo -n hello	#不换行
 
 #相当于windows下cls
 printf "\033c"
@@ -359,43 +411,27 @@ dd if=/dev/cdrom of=/root/rhe15.iso		#制作镜像
 dd if=/dev/zero of=/home/swapfile bs=1M count=1024
 ```
 
-
-
-### 列表
+#### read
 
 ```sh
-#定义方式
-a=(1 2 3)
-a=({1..100})	#自动展开1-100
-a=(`seq 1 100`)	#采用序列生成
-#读取
-echo ${a[2]}
+read 	#和用户交互，输入
 
+#示例
+read -p "tips:"	x 	#输入时提示tips:输入内容保存到变量x
+echo $x		#输出变量
 
+#示例2
+read x y	#输入的内容以空格分开，保存到x和y变量
+```
+
+#### watch
+
+```sh
+监控命令执行结果，并全屏显示
+
+#示例
+watch 'ls -l'		#查看当前目录情况，每隔2秒刷新
 ```
 
 
-
-
-
-### 关系运算
-
-#### 算术运算
-
-```sh
-#1.使用let
-a=1
-b=2
-let c=$a+$b
-echo $c
-
-#2.使用$[]
-c=$[$a+$b]
-
-#3.使用$(())
-c=$(($a+$b))
-
-#4. expr
-c=`expr $a + $b`	#注意空格
-```
 

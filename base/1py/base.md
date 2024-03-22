@@ -7,6 +7,7 @@
 import time
 import sys
 import os
+import gc
 
 print("hello")	#打印
 print("hello",end="")	#不换行
@@ -29,6 +30,14 @@ print(sys.argv)	#执行py test.py a b c 输出：['test.py','a','b','c']
 
 #执行系统命令
 os.system("mkdir today")
+
+#删除变量，释放资源
+#不会删除变量引用的对象
+del a
+
+#清除内存，尽量避免主动调用gc.collect()
+#除非当你new出一个大对象，使用完毕后希望立刻回收，释放内存
+gc.collect()
 
 class A:
     __a=1	#私有方法/属性 前加2个下划线__
@@ -53,12 +62,12 @@ pip install --upgrade pip
 #查看已安装的模块 (列表，路径)
 pip list
 #查看模块安装路径
-python -m site		#site-packages 即为库安装的位置
+python -m site-packages		#site-packages 即为库安装的位置
 #安装模块
 pip install xxx
 python -m pip install xxx 		#此命令适用于pip没有添加到环境变量
 #卸载模块
-pip unstall xxx
+pip uninstall xxx
 #终端运行命令
 python xxx.py
 #或者
