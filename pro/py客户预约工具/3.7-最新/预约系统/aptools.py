@@ -137,7 +137,7 @@ def b_ex_info(f):
 	
 def get_appoint_info(order_sn):
 	re = None
-	code = '1389jxxxxxxx0529'		#
+	code = 'xxxx'		#
 	hl = hashlib.md5()
 	hl.update(code.encode(encoding='utf-8'))
 	md5code = hl.hexdigest()

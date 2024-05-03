@@ -1,3 +1,7 @@
+
+
+#### 数组
+
 ```js
 
 //数组添加元素：
@@ -19,4 +23,96 @@ JSON.parse(jsonstr)
 //数组(对象)转json：
 JSON.stringify(arr)
 ```
+
+#### 基本类型转换
+
+```js
+i = 2
+
+s = i.toString();
+alert(typeof i)		//string类型
+
+i = parseInt(s);
+f = parseFloat(s);
+alert(typeof i)		//number类型
+alert(typeof f)		//number类型
+
+i = Number(s);
+alert(typeof i)		//number类型
+
+b = null
+nb = Boolean(b)
+alert(typeof nb)	//object类型
+```
+
+#### string
+
+```js
+
+//==============字符串是否包含字串
+var s = "abcd";
+var s2 = "ab";
+//方式一：支持旧版浏览器
+if(s.indexOf(s2) !== -1){
+    alert("包含")
+}
+//方式二：新版浏览器
+s.includes(s2); //true
+
+//正则方式
+var str = "123"
+var reg = RegExp(/3/);
+if(str.match(reg)){
+ //包含；
+}
+//==============字符串是否包含字串
+```
+
+
+
+
+
+#### 时间日期
+
+```js
+//时间戳转日期对象
+let timestamp = new Date().valueOf();//当前时间戳
+date = new Date(timestamp);		//日期对象
+let formattedDate = date.toLocaleString();	//格式化日期
+formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();	//同上
+
+//字符串转时间戳
+var dateString = "2022-01-01";
+var timestamp = Date.parse(dateString);	//毫秒级时间戳
+
+//字符串转日期对象，再转时间戳
+var dateString = "2022-01-01";
+var dateObject = new Date(dateString);
+var timestamp = dateObject.getTime();	//毫秒级时间戳
+
+//===年月日时分秒
+let timestamp = 1619183582000;			//毫秒级时间戳
+let date = new Date(timestamp);
+let year = date.getFullYear();
+let month = ('0' + (date.getMonth() + 1)).slice(-2);
+let day = ('0' + date.getDate()).slice(-2);
+let hours = ('0' + date.getHours()).slice(-2);
+let minutes = ('0' + date.getMinutes()).slice(-2);
+let seconds = ('0' + date.getSeconds()).slice(-2);
+let formattedDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+console.log(formattedDate);
+```
+
+
+
+#### js换行
+
+ ```js
+ //太长使用反斜杠\换行
+ let m = `mmmmmmmmmmmm\
+ 	iiiiiiiiiiii\
+     iiiiiiiiiiiiiiii\
+     dddddddddddddd\
+ 	rrrrr`;
+ ```
 

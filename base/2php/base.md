@@ -284,28 +284,44 @@ echo $obj->age; // 输出 25
 	function numerice_ex(){
 		$i = 3;
 	
-		// #是否为数字，浮点数
-	
+		// #是否为数字，整数，浮点数
+    	$flag = is_numeric($i);	//判断是否为数字
+		$f = is_int($i);
+    	$f = is_float($i);
+    
 		// #浮点数保留几位
+    	$f = 0.223;
+    	$f2 = number_format($f,2);	//0.22
 	
 		// #取整，四舍五入，向上取整，向下取整
-	
-		// #数字类型转换（整数，浮点数，字符串）
-	
-		// #数字和字符转换
-	
-		// #进制转换：2，8，10，16
-	
-		// #加减乘除，科学计算
-
-		//is_numeric函数
-		$flag = is_numeric(123);	//判断是否为数字
-
-		$f = 0.3;
+    	$f = 0.3;
 		$re = intval($f);	//取整
-		$re = round($f);	//四舍五入
+		$re = round($f,2);	//保留2位，四舍五入
 		$re = ceil($f);		//向上取整
 		$re = floor($f);	//向下取整
+	
+		// #数字类型转换（整数，浮点数，字符串）
+		floatval($i);
+    	strval($i);
+    	intval($i)
+	
+		// #进制转换：2，8，10，16
+        //方法原型：string base_convert(string $number, int $frombase, int $tobase)
+        //$number：要转换的数。
+		//$frombase：原数的进制。
+        //$tobase：目标进制。
+        // 将十进制数100转换为二进制
+        $decimal = 100;
+		$binary = base_convert($decimal, 10, 2);
+    	// 将二进制数1100100转换为十六进制
+		$hexadecimal = base_convert($binary, 2, 16);
+        
+		// #加减乘除，科学计算
+		//$a+$b $a-$b $a*$b $a/$b $a%$b
+    	bcadd($a,$b,1);
+    	bcsub($a,$b,1);
+    	bcmul($a,$b,1);
+    	bcdiv($a,$b,1);
 	
 	}
 ```
@@ -329,7 +345,8 @@ echo $obj->age; // 输出 25
 		// #去除两端空格，去左lstrip，去右rstrip
 	
 		// #字符串转int，float（互转）
-	
+		intval(s);
+        floatval(s)
 		// #下标截取子串
 	
 		// #字串是否存在

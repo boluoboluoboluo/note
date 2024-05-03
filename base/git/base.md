@@ -47,10 +47,9 @@ git show <commitid>		#查看某次提交详情 commitid为版本id前7位
 git restore	[file]	#恢复
 git restore --stage [file]	#恢复在暂存区的改动
 
-
-git log					#查看版本号
+git log			#查看版本号
 git reset --hard d8fc1e10c9exxxxxxxxxxxxxx	#恢复到指定版本 hard后面为版本id
-git reset --hard x	回退到某个本地版本,x为git log中出现的hash值的前七位
+git reset --hard x	#回退到某个本地版本,x为git log中出现的hash值的前七位。hard表示丢弃工作区和暂存区改动
 git push -f origin master			#强制push
 ```
 

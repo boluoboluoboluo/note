@@ -33,6 +33,10 @@ source c:/dbname.sql
 导出：
 
 ```sql
+#导出整个库
+mysqldump -u 用户名 -p 数据库名 > 导出的文件名.sql
+
+#导出详细
 mysqldump -h [host] -P [port] -u [username] -p[passwd] [dbname] [tablename] --where="create_time>='2017-07-01' and is_current=1" --skip-lock-tables>dbname.sql
 #示例
 mysqldump -h 10.8.1.1 -P 3306 -u lj -pxxxxx wuchuang qnh_goods --where="id>9620" --skip-lock-tables>dbname.sql
@@ -53,6 +57,8 @@ mysqldump -h 10.8.1.1 -P 3306 -u lj -pxxxxx wuchuang qnh_goods --where="id>9620"
 create database database_name;
 CREATE DATABASE database_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 show databases;
+
+drop database database_name		#删除数据库
 
 SHOW VARIABLES LIKE 'character_set_database';	#查看字符集
 show create database database_name	#查库的字符集

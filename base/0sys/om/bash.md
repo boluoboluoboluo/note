@@ -318,6 +318,24 @@ sed '2a \ppp'	filename	#在第2行追加ppp
 sed 's/A/X/' filename	#将A替换成X
 ```
 
+#### awk
+
+```sh
+顺序读取文件行，并进行切割，切割的每一段赋值给变量$1,$2...
+#语法
+awk 'pattern[action]' file		#pattern：匹配模式，action：处理动作
+#示例 默认分隔符空格
+df -Ph | awk '{print $1}'		#df数据每行根据空白字符分割（不管多少空格），取第一个字段
+df -Ph | awk '{pring $0}'		#$0表示所有字段
+df -Ph | awk '{pring $NF}'		#NF字段个数，$NF表示最后一个字段
+
+awk -F: '{print $1,$3}' /etc/passwd		#指定分隔符为冒号:
+```
+
+
+
+
+
 #### locate
 
 ```sh
