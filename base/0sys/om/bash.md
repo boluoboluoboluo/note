@@ -116,6 +116,24 @@ EOF
 declare -i SUM	#声明SUM为整型
 ```
 
+```sh
+#变量长度
+${#var}
+#变量赋值
+${var:-word}	#如果var为空或未定义，则变量展开为word，否则，展开为var
+${var:+word}	#如果var为空或未定义，不做任何操作，否则展开为word
+${var:=word}	#如果var为空或未定义，则变量展开为word，并将展开后的值赋值给var
+
+#取子串
+${var:offset}	#从偏移offset处取子串
+${var:offset,length}	#
+
+```
+
+
+
+
+
 ### 循环
 
 ```sh
@@ -427,6 +445,7 @@ dd if=/dev/cdrom of=/root/rhe15.iso		#制作镜像
 
 #/dev/zero 表示读0，数据要多少有多少（与/dev/null相反）
 dd if=/dev/zero of=/home/swapfile bs=1M count=1024
+sync	#数据立刻写入磁盘
 ```
 
 #### read
@@ -451,5 +470,22 @@ read x y	#输入的内容以空格分开，保存到x和y变量
 watch 'ls -l'		#查看当前目录情况，每隔2秒刷新
 ```
 
+#### trap
 
+```sh
+#信号捕捉
+# 语法：trap 'command' sig
+trap 'echo hello' SIGINT	#捕捉SINGINT信号 ,注意：脚本里不能捕捉9和15信号
+```
+
+#### 其他命令
+
+```sh
+#打印程序或库文件的共享依赖库
+ldd	
+
+#创建虚根
+chroot /PATH/TO/TMPROOT
+chroot /text/virroot /bin/bash	#示例
+```
 

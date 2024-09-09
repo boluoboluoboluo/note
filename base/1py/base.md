@@ -397,50 +397,142 @@ import hashlib
 | (?P<name>) | 分组起别名                       |
 | (?P=name)  | 引用别名为name分组匹配到的字符串 |
 
-示例
+##### 示例
 
 ```py
 import re
+
+#格式
+#将正则表达式字符串形式编译成正则表达式对象
+#编译后可调用search,match,findall,finditer,sub方法
+#regex = re.compile(pattern,flags=0)
 
 reg = r"\d+"		#匹配首部是数字
 s = "23433aaa"
-pattern = re.compile(reg)
+pattern = re.compile(reg)	#编译后多次使用
 r = pattern.match(s)
 print(r)
+
 ```
 
-
+##### search
 
 ```py
-import re
+#字符串内查找模式匹配,只到找到第一个匹配然后返回match对象
+#pattern:正则表达式
+#string：待匹配字符串
+#flags:控制标记
+	# re.I | re.IGNORECASE :忽略正则表达式的大小写，[A-Z]能匹配小写字符
+    # re.M | re.MULTILINE :正则表达式的^操作符能将给定字符串的每行当作匹配开始
+    # re.S | re.DOTALL :正则表达式的.操作符能够匹配所有字符，默认匹配除换行符外的所有字符
+re.search(pattern,string,flags=0)
 
-s = "the nights"
-reg = "t"
-m = re.match(reg,s)	#匹配，返回对象（match object),否则返回None
-if m:
-	data = m.group()	#若匹配，可提取数据	
-	print(data)
-
-#字符串内查找模式匹配,只到找到第一个匹配然后返回
+#示例
 ret = re.search(r"\d+", "阅读次数为 9999")
 ret.group()
+```
 
-#返回所有满足匹配条件的结果,放在列表里
+##### match
+
+```py
+#从字符串的开始位置匹配，返回match对象
+#（参数释义参考search）
+re.match(pattern,string,flags=0)
+
+#示例
+s = "the nights"
+reg = r"t"
+m = re.match(reg,s)	#匹配，返回对象（match object),否则返回None
+if m:
+	data = m.group(0)	#若匹配，可提取数据	
+	print(data)
+```
+
+##### findall
+
+```py
+#搜索字符串，以列表类型返回全部匹配的子串
+#（参数释义参考search）
+re.findall(pattern,string,flags=0)
+
+#示例
 ret=re.findall(r'\d+',"商品：辣条,数量：5,价格：5")
 print(ret)
+```
 
+##### split
+
+```py
+#将字符串按正则表达式分割，返回列表类型
+#（参数释义参考search）
+# maxsplit:最大分割数，剩余部分作为最后一个元素输出
+re.split(pattern,string,maxsplit=0,flags=0)
+
+#示例
+re.split(r'[1-9]\d{5}','BIT100081 TSU100084')	# 结果：['BIT',' TSU','']
+```
+
+##### finditer
+
+```py
+#搜索字符串，返回匹配结果的迭代类型，每个迭代元素是match对象
+#（参数释义参考search）
+re.finditer(pattern,string,flags=0)
+
+#示例
+for m in re.finditer(r'[1-9]\d{5}','BIT100081 TSU100084'):
+    if m:
+        print(m.group(0))
+```
+
+##### sub
+
+```py
+#在字符串中替换所有匹配正则表达式的子串，返回替换后的字符串
+#（参数释义参考search）
+# repl:替换匹配字符串的字符串
+# count:匹配的最大替换次数
+re.sub(pattern,repl,string,count=0,flags=0)
+
+#示例
+re.sub(r'[1-9]\d{5}',':zipcode','BIT100081 TSU100084'):
+```
+
+##### 贪婪非贪婪
+
+```py
 #Python里数量词默认是贪婪的（在少数语言里也可能是默认非贪婪），总是尝试匹配尽可能多的字符；
 #非贪婪则相反，总是尝试匹配尽可能少的字符。
 #在"*","?","+","{m,n}"后面加上？，使贪婪变成非贪婪。
 
-#邮箱正则
+#贪婪示例
+match = re.search(r'PY.*N','PYANBNCNDN')
+match.group(0)		#输出 PYANBNCNDN
+
+#非贪婪示例
+match = re.search(r'PY.*?N','PYANBNCNDN')
+match.group(0)		#输出 PYAN
+```
+
+
+
+##### 邮箱正则
+
+```py
 reg = r'^[\w\.-]+@[\w\.-]+\.\w+$'
 ret=re.match(reg,"gmpzm@163.com")
+```
 
-#手机号正则
+##### 手机号正则
+
+```py
 reg = r"^1[3-9]\d{9}$"
 ret=re.match(reg,"13478777777")
+```
 
+##### 身份证正则
+
+```py
 #身份证正则
 reg = r"[1-9]\d{5}(19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[\d|X|x]$"
 
@@ -455,7 +547,6 @@ def get_birthday(id_number):
         return f"出生年月日为：{year}年{month}月{day}日"
     else:
         return "无法从身份证号码中提取出生年月日信息"
-
 ```
 
 
@@ -515,6 +606,28 @@ def slipce_ex():
     #当 step>0，start_index 的空值下标为 0，stop_index 的空值下标为 length，step 的方向是左到右；
 	#当 step<0，start_index 的空值下标为 length，stop_index 的空值下标为 0，此时反向为右到左了！
 	#也就是说 start_index、 stop_index 空值代表的头和尾，是随着 step 的正负而改变的。
+```
+
+#### 字典
+
+```py
+d = {'a': 1, 'b': 2}
+print(d['b'])
+d['c'] = '3'	#添加
+d['b'] = '3'	#更新
+del d['b']		#删除元素
+d.clear()		#清空
+del d			#删除字典
+
+len(d)		#长度
+str(d)		#字符串表示
+d.copy()	#浅复制
+d.get(key,default=None)	#返回指定值，如不存在则返回default
+f = 'a' in d	#是否存在key
+d.keys		#列表形式返回所有key
+d.values	#列表形式返回所有值
+d.pop(key)	#返回并删除指定key
+d.popitem()	#返回并删除最后一个键值对
 ```
 
 

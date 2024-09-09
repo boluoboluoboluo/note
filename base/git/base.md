@@ -10,7 +10,8 @@ git init		#初始化git仓库
 ### 拉取远程分支
 
 ```sh
-git pull origin main	#拉取main分支
+git remote add origin git@xx.com:test/test.git		#添加远程仓库
+git pull origin master	#拉取main分支
 ```
 
 ### 克隆

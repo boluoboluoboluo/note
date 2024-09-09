@@ -4,8 +4,17 @@
 #pip更新
 python -m pip install --upgrade pip
 
+#查看配置
+pip config list
+
+#查看安装的包
+pip list
+
 #设置全局源
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+#恢复默认软件包源
+pip config unset global.index-url
 
 #查看某个包可用版本
 pip install packge_name==

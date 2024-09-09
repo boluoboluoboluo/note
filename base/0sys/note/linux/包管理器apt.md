@@ -1,4 +1,6 @@
-**apt针对debian系列系统** 
+#### common
+
+**apt针对debian系列系统**  
 
 ```sh
 #备份配置源
@@ -27,5 +29,16 @@ sudo apt install libcurl4=7.64.0-4+deb10u3		#指定安装版本(降级)
 
 #清理配置文件残留
 dpkg -l |grep "^rc"|awk '{print $2}' |xargs aptitude -y purge
+```
+
+
+
+#### 包管理器
+
+```sh
+#核心功能：
+1，制作软件包
+2，安装、卸载、升级、查询、校验
+3，
 ```
 

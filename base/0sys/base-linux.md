@@ -1,5 +1,7 @@
 ### 概要
 
+
+
 #### 根文件系统
 
 ```sh
@@ -17,14 +19,17 @@
 	/lib/modules: 内核模块文件
 /media: 挂载点目录，移动设别
 /mnt: 挂载点目录，额外的临时文件系统
-/opt: 可选目录，第三方程序的安装目录
+/opt: 可选目录，第三方程序的安装目录（旧，新的使用/usr/local目录）
 /proc: 伪文件系统，内核映射文件
 /sys: 伪文件系统，和硬件设备相关的属性映射文件
 /tmp: 临时文件，/var/tmp
-/var: 可变化的文件
+/var: 可变化的文件（如日志等），建议单独分区
+
+#系统启动需要用到的程序
 /bin: 可执行文件，用户命令
 /sbin: 管理命令
 
+#操作系统核心功能，可单独分区
 /usr: shared, read-only
 	/usr/bin
 	/usr/sbin
@@ -103,12 +108,15 @@ man 命令	#查看命令帮助
 #快捷打开终端： `ctrl+alt+t`
 #清屏幕：`ctrl+l` 或 命令clear
 
-hostname 	#主机名
+hostname 	#主机名 /etc/sysconfig/network
 echo $HOSTNAME	#获取当前主机名
 uname -a	#查看系统名
 cat /proc/version	#查看版本的命令
 cat /proc/cpuinfo	#查看cpu信息
+cat /proc/meminfo	#查看内存信息
 lscpu #cpu详细信息
+lsusb	#查看usb设备
+lspci	#查看所有设备信息
 
 su	#切换用户，（切换的用户并不是登录用户）
 w		#查看当前系统中登录的用户,及正在干嘛
@@ -125,17 +133,11 @@ basename	#
 mail	#
 
 
-
 free	#查看内存
 
 echo $LANG	#查看编码
 
 top	#查看运行动态视图
-ps -aux		#查看当前登录用户所有进程
-ps -ef		#列出进程及对应父进程
-pstree
-kill 进程id	#杀死进程
-killall 进程名	#根据进程名杀死进程
 
 systemctl start 服务名		#启动服务
 systemctl stop 服务名		#停止
@@ -145,6 +147,9 @@ systemctl enable 服务名		#自动启动
 systemctl disable 服务名		#不自动启动
 systemctl status 服务名		#查看运行的服务
 systemctl list-units 服务名		#列出所有
+systemctl list-units --type=service	#查看所有服务
+systemctl list-units --type=service --state=running	#查看正在运行的服务
+systemctl list-unit-files --type=service --state=enabled	#查看开机自启的服务
 
 ```
 
@@ -300,6 +305,7 @@ umask	#遮罩码，用于创建文件的默认权限（默认值减遮罩码，�
 ls 	#列出目录，参数 -a:全部文件，-d：仅列出目录，-l：列出文件属性详情，-i：显示inode节点信息
 ls -lh	#查看目录详情
 
+
 #cd中文目录
 ls | nl		#列出目录编号
 cd `ls | sed -n "xx,0p"`	#xx为目录的行号
@@ -418,6 +424,7 @@ df [-ahikHTm] [目录或文件名]	#列出文件系统的整体磁盘使用量
 du [-ahskm] 文件或目录名称		#检查空间使用量
 # -a：列出所有文件和目录容量，-h：易读格式，-s：列出总量，-S：不包括子目录的总计
 du -h --max-depth=1		#列出当前目录各文件大小
+du -sh .	#查看当前目录大小
 
 #fdisk：用于磁盘分区
 fdisk -l	#列出分区信息
@@ -739,32 +746,19 @@ swapon -a
 
 
 
-
-
 ### 网络
 
 ```shell
+
 #网络服务状态
 systemctl status networking
 
 ifconfig	#查看网络信息
 ip addr		#(debian用)同上，如果上面命令未找到
 
-#防火墙
-#说明debian12没有iptables，默认的是nftables
-systemctl status nftables.service	#查看状态，默认未开启
-systemctl enable nftables.service
-
-#----- ufw（ufw是iptables的简洁化前端）
-sudo ufw status	#(debian用)，查看防火墙状态	先安装ufw
-sudo ufw enable		#开启防火墙
-sudo ufw default deny 	#关闭所有外部对本机的访问，但本机访问外部正常
-sudo ufw disable		#关闭防火墙
-sudo ufw allow 80		#允许外部访问80端口
-sudo ufw delete allow 80 	#禁止外部访问80 端口
-sudo ufw allow from 192.168.1.1	#允许ip访问
-sudo ufw deny smtp 		#禁止外部访问smtp服务
-#------
+#设置ip命令（本次设置有效）
+ip addr add new_ip/mask dev ethx	#ethx：网卡名称
+sudo ip link set dev ethx up	#使更改生效
 
 #端口
 netstat		#查看网络连接信息
@@ -782,8 +776,222 @@ nslookup 域名	#同上
 lsof	#命令是一种列出系统文件信息的命令，同时也可以列出进程信息，包括占用端口的进程信息。
 sudo lsof -i :80 	#列出80端口的信息
 
-ip网关路由dns
 
-局域网
+#指定本机解析
+/etc/hosts
+
+#一块网卡可以有多个地址
+eth0:0
+eth0:1
+```
+
+#### 防火墙
+
+```sh
+#防火墙
+#说明debian12没有iptables，默认的是nftables
+systemctl status nftables.service	#查看状态，默认未开启
+systemctl enable nftables.service
+
+#----- ufw（ufw是iptables的简洁化前端）
+sudo ufw status	#(debian用)，查看防火墙状态	先安装ufw
+sudo ufw enable		#开启防火墙
+sudo ufw default deny 	#关闭所有外部对本机的访问，但本机访问外部正常
+sudo ufw disable		#关闭防火墙
+sudo ufw allow 80		#允许外部访问80端口
+sudo ufw delete allow 80 	#禁止外部访问80 端口
+sudo ufw allow from 192.168.1.1	#允许ip访问
+sudo ufw deny smtp 		#禁止外部访问smtp服务
+#------
+```
+
+### 进程
+
+```sh
+内核调度（进程管理结构表）
+应用程序->进程（指令，堆栈，共享对象映射，变量，内存页框，上下文）
+内存管理单元（MMU）
+多核cpu
+多进程，多线程（线程锁）
+睡眠（场景：当执行的进程需要加载额外的io资源时，由于io速度慢，进程转入睡眠，交出cpu资源）
+僵尸（进程运行结束，内存没有释放）->内存泄漏
+
+进程优先级：
+0-99：内核调整
+100-139：用户可控制
+
+进程间通信：（IPC）
+	共享内存
+	信号（Signal）
+	Semaphore（旗语）
+
+```
+
+#### common
+
+```sh
+pstree	#进程树
+
+ps -aux		#查看当前登录用户所有进程
+	a:		#所有与终端有关的进程
+	u:		#显示启动进程的用户信息
+	x:		#所有与终端无关的进程
+	
+ps -ef		#列出进程及对应父进程
+	e:		#显示所有进程
+	f:		#所有格式
+
+进程状态字段：
+	D：不可中断的睡眠
+	R：运行或就绪
+	S：可中断的睡眠
+	T：停止
+	Z：僵死
+	<：高优先级
+	N：低优先级
+	+：前台进程组中的进程
+	l：多线程进程
+	s：会话进程的首进程
+	
+top：	#进程动态显示
+	M：根据驻留内存大小进行排序
+	P：根据CPU使用百分比排序
+	T：根据累计时间进行排序
+	
+	-d：指定延迟时长，单位秒
+	-b：批模式
+	-n #：在批模式，共显示多少批(#为数字，翻页)
+	
+kill 进程id	#杀死进程
+killall 进程名	#根据进程名杀死进程
+
+kill -l		#显示所有信号
+	1：SIGHUP（让一个进程不用重启，就可以重读配置文件,并使其生效）
+	2：SIGINT（ctrl+c，中断一个进程）
+	9：SIGKILL（强行杀死一个进程）
+	15:SIGTERM（终止一个进程，释放资源，默认信号）
+	#示例：
+		kill -1
+		kill -SIGUP
+	
+前台作业：占据命令提示符
+后台作业：启动后，释放命令提示符，后续操作在后台完成
+前台 -> 后台：
+	ctrl+z：把正在前台的作业送往后台（此时stoped）
+	COMMAND &：让命令在后台执行
+
+jobs：查看后台所有作业
+	作业号，不同于进程号
+	+：命令默认操作的作业
+	-：命令下一次操作的作业
+	
+bg ：让后台的停止作业继续运行
+	#示例
+	bg [%JOBID]	#默认为+号作业
+	
+fg ：重新调回前台
+	#示例
+	fg [%JOBID]	#默认为+号作业
+	
+kill %JOBID		#杀死后台作业
+```
+
+```sh
+vmstat	#显示系统状态信息
+vmstat 1 #每隔1秒显示1次
+vmstat 1 5 #每隔1秒显示1次，共显示5次
+```
+
+### 任务计划
+
+#### common
+
+```sh
+#1,未来的某个时间执行一次任务
+	#at命令
+	#语法：
+		at 时间
+			绝对时间：HH:MM, DD.MM.YY MM/DD/YY
+			相对时间：now+#
+				单位：minutes，hours，days，weeks
+		at> COMMAND		#输入命令
+		at> Ctrl+d		#结束命令
+		
+		at -ls		#显示at任务
+		
+		#权限
+		/etc/at.deny
+		
+	#batch命令 （不需选择时间，自动选择系统空闲时执行），语法格式同at
+	
+#2，周期性的执行某个任务
+	#cron命令 (cron自身是一个不间断运行的服务：crond)
+		#系统cron，位于/etc/crontab
+			#格式：分钟 小时 天 月 周 用户 任务
+				#时间有效取值
+				分钟：0-59
+				小时：0-23
+				天：1-31
+				月：1-12
+				周：0-7	（0和7都表示周日）
+				#时间通配表示：
+				*：对应所有有效取值
+					13 12 * * *		#示例：每天12点13分
+				,:离散时间点取值
+                	10,40 * * * *	#示例，每小时第10分钟，第40分钟执行
+                -：连续时间的
+                	10 02 * * 1-5	#示例，周1到周5的2点10分
+                /#：对应取值范围内每多久一次
+                	*/3 * * * *		#示例，每3分钟一次
+                
+          	#执行结果以邮件形式发送给管理员
+                */3 * * * * /bin/cat /etc/fstab &> /dev/null	#不发邮件
+                */3 * * * * /bin/cat /etc/fstab > /dev/null	#仅错误结果发邮件
+            #环境变量：PATH环境变量指定路径（/bin:/sbin:/usr/bin:/usr/sbin）
+                	
+		#用户cron，位于/var/spool/cron/USERNAME
+			#格式：分钟 小时 天 月 周 任务
+			#用户任务的管理
+				crontab 
+					-l:		#列出当前用户所有cron任务
+					-e：		#编辑
+					-r：		#移除
+					-u USERNAME：		#管理其他用户的cron任务
+			
+			
+	#anacron命令，cron的补充，能够实现cron实现因为各种原因(如关机)未执行的任务恢复执行一次
+		#/etc/anacrontab
+			1 65 cron.daily run-parts /etc/cron.daily	#示例，已经1天每执行，将在开机后65分钟执行
+
+```
+
+### 日志系统
+
+#### common
+
+```sh
+#syslog服务,包括2个进程：
+	syslogd：非内核其他设施产生日志
+		/var/log/messages：系统标准错误日志信息
+		/var/log/maillog：邮件系统产生的日志信息
+		/var/log/secure：
+	klogd：内核产生日志 （记录到/var/log/dmesg）
+	
+#日志滚动（日志切割）
+
+#日志记录格式示例（/etc/syslog.conf）
+mail.info /var/log/mail.log		#表示将mail相关，级别为info及以上的信息记录到/var/log/mail.log文件中
+auth.=info @10.0.0.1			#表示将auth相关的，级别为info的信息记录到10.0.0.1主机上（该主机需配置配置文件）
+user.!=error					#表示记录user相关，不包括error级别的信息
+user.!error						#表示与user.error相反
+*.info							#表示记录所有info及以上级别的信息
+mail.*		-/var/log/mail.log	#记录mail相关的所有日志信息（异步写入）
+*.*								#记录所有级别日志信息
+cron.info;mail.info				#记录多个日志信息，cron和mail
+cron,mail.info					#同上
+mail.*;mail.!=info				#记录mail所有级别信息，不包括info级别
+*.emerg		*					#emerg信息，立即发给所有用户
+
+	
 ```
 

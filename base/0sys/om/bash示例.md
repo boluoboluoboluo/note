@@ -152,3 +152,55 @@ m ：结束颜色设置。
 ...同文字颜色，4开头
 ```
 
+#### 默认赋值
+
+```sh
+A=3
+echo ${A:-30}	#输出3
+unset A
+echo ${A:-30}	#输出30 (若为空或不存在，则使用默认赋值)
+```
+
+#### 引入配置文件
+
+当前目录脚本` ./a.sh`，配置文件`./a.conf`
+
+```sh
+#./a.conf内容
+A="hello"
+```
+
+```sh
+#./a.sh内容
+. ./a.conf	#引入配置文件
+echo ${A}
+```
+
+#### 创建临时文件
+
+```sh
+#语法
+mktemp file.XXX		# "XXX" 会生成随机数字，如file.PeE
+mktemp -d file.XXX		# 创建临时目录
+#创建临时文件并获取文件名
+FILE='mktemp file.XXX'
+echo $FILE
+```
+
+#### ping网段
+
+```sh
+#!/bin/bash
+#
+PINGFILE = `mktemp pingfile.XXXX`
+NET=192.168.0
+trap 'echo "quit.";exit 1' INT		#捕捉进程中断信号，退出
+for I in {200..254};do
+	if ping -c 1 -W 1 $NET.$I &> /dev/null;then
+		echo "$NET.$I is up." | tee >> ./PINGFILE	#能ping通的写入文件
+	else
+		echo "$NET.$I is down."
+	fi
+done
+```
+
