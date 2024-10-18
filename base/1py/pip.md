@@ -10,6 +10,9 @@ pip config list
 #查看安装的包
 pip list
 
+#查看安装某个包，如未安装则无信息
+pip show package_name
+
 #设置全局源
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 

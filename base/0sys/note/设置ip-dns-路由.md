@@ -231,7 +231,7 @@ ip route flush 192.168.2.0/24 #这个是清理所有192.168.2.0/24相关的所�
 ```sh
 sudo dhclient -r && sudo dhclient
 #或 
-systemctl restart dhcpcd 
+systemctl restart dhcpcd 	#dhcp服务端
 ```
 
 **重启网络服务** 

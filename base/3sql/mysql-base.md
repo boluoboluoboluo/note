@@ -80,6 +80,7 @@ create table `test`(
 	name varchar(255) not null default '',
 	age int(4) not null default 0,
 	score decimal(10,2) NOT NULL default 0.00 COMMENT '',
+    desc text,	--text字段类型不能设置默认值
 	primary key (id)
 )engine=innodb default charset=utf8 row_format=dynamic;
 

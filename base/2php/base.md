@@ -389,6 +389,7 @@ echo $obj->age; // 输出 25
 		//子字符串
 		$sub_str = substr($str,2);		//索引位置后的子串
 		$sub_str2 = substr($str,2,1);	//索引位置2，长度1
+        $sub_str2 = substr($str,-1,1);	//倒数第一位
 		//todo..
 	
 		$arr = ["a","b","c"];
@@ -687,13 +688,63 @@ krsort() - 根据关联数组的键，对数组进行降序排列
 ```php
 <?php
  	$file=fopen("welcome.txt","r") or exit("Unable to open file!");
-	
+
+	if(file_exists($file)){
+        echo "file not exists.";
+    }
+	if(is_dir($file)){
+        echo "is dir.";
+    }
+	if(is_file($file)){
+        echo "is file.";
+    }
+
 	fgets();	//函数用于从文件中逐行读取文件。
 	fgetc();	//函数用于从文件中逐字符地读取文件。
 
-	if (feof($file)) echo "End of file";
-
+	while(feof($file)){
+        $str = fgets();
+    }
 	fclose($file);
+
+	unlink($file);		//delete file
+
+//============================file_get_contents
+// 读取文件内容
+$content = file_get_contents('path/to/file.txt');
+echo $content;
+
+// 写入文件内容
+$content = "Hello, World!";
+file_put_contents('path/to/file.txt', $content);
+
+//============================fread
+// 读取文件内容
+$file = fopen('path/to/file.txt', 'r');
+$content = fread($file, filesize('path/to/file.txt'));
+fclose($file);
+echo $content;
+ 
+// 写入文件内容
+$file = fopen('path/to/file.txt', 'w');
+$content = "Hello, World!";
+fwrite($file, $content);
+fclose($file);
+//============================fgets
+// 逐行读取文件内容
+$file = fopen('path/to/file.txt', 'r');
+while (!feof($file)) {
+    $line = fgets($file);
+    echo $line;
+}
+fclose($file);
+ 
+// 逐行写入文件内容
+$file = fopen('path/to/file.txt', 'w');
+$content = "Hello, World!";
+fputs($file, $content);
+fclose($file);
+//============================
 ?>
 ```
 

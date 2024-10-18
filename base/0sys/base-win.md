@@ -40,8 +40,6 @@ ipconfig /displaydns
 ipconfig /displaydns > c:/z_dns.txt
 ipconfig /flushdns
 
-nslookup    	#查看dns服务器(待确定)
-
 tracert 路由
 
 netstat -ano		#显示端口
@@ -120,7 +118,22 @@ setx /M
 
 ```
 
-### 批处理
+
+
+#### 域名解析
+
+```sh
+nslookup    	#交互式命令
+
+#示例：
+>server 192.168.1.1		#指定域名解析服务器
+>set q=A				#指定资源类型
+>www.baidu.com
+```
+
+
+
+#### 批处理
 
 ```sh
 #命令行传参

@@ -753,7 +753,7 @@ swapon -a
 #网络服务状态
 systemctl status networking
 
-ifconfig	#查看网络信息
+ifconfig	#查看网络信息（旧命令）
 ip addr		#(debian用)同上，如果上面命令未找到
 
 #设置ip命令（本次设置有效）
@@ -766,7 +766,7 @@ ss  #(debian用)同上
 ss -tunlp	
 #-t表示列出TCP协议的信息
 #-u表示列出UDP协议的信息
-#-n表示不进行DNS解析
+#-n表示数字方式显示IP和端口
 #-l表示只列出监听状态的网络连接
 #-p表示列出占用该端口的进程信息
 

@@ -1,4 +1,4 @@
-##### 常见命令和设置
+#### 常见命令和设置
 
 ```sh
 #查看当前镜像源：
@@ -6,6 +6,9 @@ npm config get registry
 
 #设置淘宝镜像源：
 npm config set registry https://registry.com.npm.taobao.org --global
+
+#新的镜像（2024）
+npm config set registry https://registry.npmmirror.com --global
 
 #切换原本npm源：
 npm config set registry https://registry.npmjs.org
@@ -33,4 +36,13 @@ npm search [-g] 模块名 [--save][-dev]
 #查看安装的模块
 npm ls
 ```
+
+#### 报错：证书过期
+
+```sh
+#解决方法：
+更换npm源
+```
+
+
 

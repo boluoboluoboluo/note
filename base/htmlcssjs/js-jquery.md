@@ -20,3 +20,23 @@ $(".cls").each(function(index){
 })
 ```
 
+#### 动态绑定事件
+
+```js
+$("body").on("click",".play_video",function(){
+	console.log("hello");
+});
+```
+
+#### jq对象转字符串
+
+```js
+let s = $(this).get(0).outerHTML;
+```
+
+#### 子节点
+
+```js
+let c = $(this).children(":eq(1)");		//第二个子节点
+```
+

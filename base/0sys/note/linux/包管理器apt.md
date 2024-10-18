@@ -42,3 +42,14 @@ dpkg -l |grep "^rc"|awk '{print $2}' |xargs aptitude -y purge
 3，
 ```
 
+#### dpkg
+
+```sh
+dpkg -i package.deb		#安装或更新软件包
+dpkg -r	package			#删除软件包
+dpkg -s package			#查询软件包
+dpkg -l					#列出已安装的软件包
+dpkg -L package			#查询软件包的文件信息
+dpkg -l package.deb		#查询软件包的依赖关系
+```
+

@@ -76,7 +76,7 @@ if(str.match(reg)){
 
 ```js
 //时间戳转日期对象
-let timestamp = new Date().valueOf();//当前时间戳
+let timestamp = new Date().valueOf();//当前时间戳:毫秒
 date = new Date(timestamp);		//日期对象
 let formattedDate = date.toLocaleString();	//格式化日期
 formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();	//同上
@@ -103,6 +103,19 @@ let formattedDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes
 console.log(formattedDate);
 ```
 
+```js
+//秒级别时间戳转日期
+function timestampToDate(stamp:any){
+    const date = new Date(stamp*1000);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以加1，并用0填充
+    const day = String(date.getDate()).padStart(2, '0'); // 用0填充
+    const hours = String(date.getHours()).padStart(2, '0'); // 用0填充
+    const minutes = String(date.getMinutes()).padStart(2, '0'); // 用0填充
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+```
+
 
 
 #### js换行
@@ -115,4 +128,13 @@ console.log(formattedDate);
      dddddddddddddd\
  	rrrrr`;
  ```
+
+#### ts可选参数
+
+```js
+//param? 参数后面加问好表示可选参数
+function test(x:string,y?:string){
+	console.log("test")    
+}
+```
 
