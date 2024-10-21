@@ -61,7 +61,8 @@ sftp> help				#显示帮助
 sftp> get remote_file [local_dir]	#下载文件
 sftp> mget remote_files [local_dir]	#批量下载文件
 sftp> put local_file [remote_dir]	#上传文件
-sftp> mput local_files [remote_dir]	#批量上传文件
+sftp> mput local_files [remote_dir]	#批量上传文件		
+sftp> mput -r /test/ /home/test2/	#本地test下所有文件，传输到远程test2目录下
 sftp> exit 							#退出
 ```
 
